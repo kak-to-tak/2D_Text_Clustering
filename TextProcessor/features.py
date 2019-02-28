@@ -6,6 +6,8 @@ from sklearn.feature_extraction.text import HashingVectorizer
 from sklearn.decomposition import TruncatedSVD
 
 # NLP Tokenization & Cleaning
+import nltk
+from nltk import punkt
 from nltk.tokenize import word_tokenize
 from TextProcessor.cleaning import clean_text
 
@@ -15,6 +17,7 @@ import pandas as pd
 
 # Word2Vec Model
 from vecshare import vecshare as vs
+import gensim
 
 def svd(data,dimensions=50):
     """ Function to reduce dimensions using Singular-Value-Decomposition (SVD) """
@@ -43,9 +46,16 @@ def tfidf_vectors(corpus,n=50):
 
     return word_tfidf_matrix
 
-def PretrainedWord2Vec(corpus,embedding_model='text8_emb'):
-    """ Convert documents to vector using pretraining embedding models """
+def trainWord2Vec(corpus):
+    print('training Word2Vec')
 
+    w2v = gensim.models.Word2Vec(corpus, size=300)
+    print('finished')
+    return(w2v)
+
+def PretrainedWord2Vec(corpus):
+    """ Convert documents to vector using pretraining embedding models """
+    embedding_model = trainWord2Vec(corpus)
     _vec = []
     for row in corpus:
 
@@ -74,7 +84,7 @@ def text_hashing(corpus,n=50):
 def text_features(corpus):
     """ Convert documents to text vector """
 
-    clean_corpus = [clean_text(doc) for doc in corpus]
+    clean_corpus = corpus
     tfidf_array = tfidf_vectors(clean_corpus)
     word2vec_df = PretrainedWord2Vec(clean_corpus)
     hash_array = text_hashing(clean_corpus)

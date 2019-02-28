@@ -17,6 +17,8 @@ from __future__ import division
 from __future__ import print_function
 
 import string
+import nltk
+from nltk.corpus import stopwords
 from itertools import combinations
 
 import networkx as nx
@@ -72,7 +74,7 @@ class TopicRank(LoadFile):
         self.topics = []
         """ The topic container. """
 
-    def candidate_selection(self, pos=None, stoplist=None):
+    def candidate_selection(self, pos=None, stoplist=stopwords.words('russian')):
         """Selects longest sequences of nouns and adjectives as keyphrase
         candidates.
 
@@ -185,7 +187,7 @@ class TopicRank(LoadFile):
     def candidate_weighting(self,
                             threshold=0.74,
                             method='average',
-                            heuristic=None):
+                            heuristic='frequent'):
         """Candidate ranking using random walk.
 
         Args:

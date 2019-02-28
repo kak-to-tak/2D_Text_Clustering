@@ -5,7 +5,7 @@ def automatic_labelling(df, col='corpus', label_col='labels'):
 
 	for label in df[label_col].unique():
 			extractor = TopicRank()
-			tx = ' '.join(df[df[label_col] == label][col].tolist())
+			tx = ' '.join(df[df[label_col] == label][col].astype(str).values.tolist())
 
 			extractor.load_document(input=tx,language="en",normalization=None)
 

@@ -72,7 +72,7 @@ class RawTextReader(Reader):
         max_length = kwargs.get('max_length', 10**6)
         nlp = spacy.load(self.language,
                          max_length=max_length)
-        spacy_doc = nlp(text)
+        spacy_doc = nlp(text if not len(text)>500000 else text[:500000])
 
         sentences = []
         for sentence_id, sentence in enumerate(spacy_doc.sents):
